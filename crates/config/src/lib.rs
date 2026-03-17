@@ -126,18 +126,12 @@ impl Default for GeneralConfig {
 }
 
 #[derive(Debug, Deserialize, Clone)]
+#[derive(Default)]
 pub struct Config {
     #[serde(default)]
     pub general: GeneralConfig,
 }
 
-impl Default for Config {
-    fn default() -> Self {
-        Self {
-            general: GeneralConfig::default(),
-        }
-    }
-}
 
 fn validate(config: Config) -> Result<Config, ConfigError> {
     if config.general.quality > 100 {
