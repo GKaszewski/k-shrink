@@ -89,6 +89,17 @@ pub struct GeneralConfig {
     /// Minimum: 100. Default: `500`
     #[serde(default = "default_poll_ms")]
     pub poll_ms: u64,
+
+    /// Additional MIME types to advertise alongside the real one.
+    /// The compressed bytes are served under all listed types — the actual
+    /// format does not change. Useful when the paste target only requests a
+    /// specific type (e.g. a browser that asks for "image/png") but can
+    /// still decode the real format via content sniffing.
+    ///
+    /// Example: `extra_mimes = ["image/png", "image/jpeg"]`
+    /// Default: `[]`
+    #[serde(default)]
+    pub extra_mimes: Vec<String>,
 }
 
 fn default_format() -> OutputFormat {
@@ -109,6 +120,7 @@ impl Default for GeneralConfig {
             format: default_format(),
             quality: default_quality(),
             poll_ms: default_poll_ms(),
+            extra_mimes: Vec::new(),
         }
     }
 }
@@ -209,6 +221,7 @@ poll_ms = 200
                 format: OutputFormat::Webp,
                 quality: 200,
                 poll_ms: 500,
+                extra_mimes: vec![],
             },
         };
         assert!(matches!(validate(c), Err(ConfigError::InvalidQuality(200))));
@@ -221,6 +234,7 @@ poll_ms = 200
                 format: OutputFormat::Webp,
                 quality: 80,
                 poll_ms: 50,
+                extra_mimes: vec![],
             },
         };
         assert!(matches!(validate(c), Err(ConfigError::InvalidPollMs(50))));

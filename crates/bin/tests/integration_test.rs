@@ -59,7 +59,7 @@ fn image_bytes_are_shrunk_and_distributed_as_webp() {
     let mock = MockClipboard::new(png, "image/png");
     let mut last_hash = None;
 
-    process_once(&mock, &webp_opts(), &mut last_hash).unwrap();
+    process_once(&mock, &webp_opts(), &[], &mut last_hash).unwrap();
 
     let dist = mock.distributed.lock().unwrap();
     assert_eq!(dist.len(), 1, "exactly one item distributed");
@@ -74,14 +74,14 @@ fn same_webp_output_not_reprocessed() {
     let mock = MockClipboard::new(png, "image/png");
     let mut last_hash = None;
 
-    process_once(&mock, &webp_opts(), &mut last_hash).unwrap();
+    process_once(&mock, &webp_opts(), &[], &mut last_hash).unwrap();
 
     // After distributing, our subprocess serves image/webp.
     // Simulate next tick: clipboard returns the webp we just wrote.
     let webp_data = mock.distributed.lock().unwrap()[0].0.clone();
     let mock2 = MockClipboard::new(webp_data, "image/webp");
 
-    process_once(&mock2, &webp_opts(), &mut last_hash).unwrap();
+    process_once(&mock2, &webp_opts(), &[], &mut last_hash).unwrap();
 
     // hash(webp) == last_hash → skipped
     assert_eq!(mock2.distributed.lock().unwrap().len(), 0);
@@ -94,7 +94,7 @@ fn non_image_mime_not_processed() {
     let mock = MockClipboard::new(b"hello world".to_vec(), "text/plain");
     let mut last_hash = None;
 
-    process_once(&mock, &webp_opts(), &mut last_hash).unwrap();
+    process_once(&mock, &webp_opts(), &[], &mut last_hash).unwrap();
 
     assert_eq!(mock.distributed.lock().unwrap().len(), 0);
 }

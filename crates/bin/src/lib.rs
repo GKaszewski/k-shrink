@@ -4,6 +4,7 @@ use tracing::{debug, info, trace};
 pub fn process_once(
     provider: &dyn ClipboardProvider,
     opts: &ShrinkOptions,
+    extra_mimes: &[String],
     last_hash: &mut Option<[u8; 32]>,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let (data, mime_type) = match provider.capture() {
@@ -38,10 +39,15 @@ pub fn process_once(
         result.mime_type
     );
 
-    provider.distribute(&[(&result.data, result.mime_type.as_str())])?;
+    // Primary MIME type first, then any aliases the user wants to lie about.
+    let mut items: Vec<(&[u8], &str)> = vec![(&result.data, result.mime_type.as_str())];
+    for alias in extra_mimes {
+        if alias != &result.mime_type {
+            items.push((&result.data, alias.as_str()));
+        }
+    }
+    provider.distribute(&items)?;
 
-    // Track hash of OUTPUT. After distributing webp-only, next capture will
-    // find image/webp (from our subprocess) → same hash → skip. No loop.
     *last_hash = Some(image_hash(&result.data));
     Ok(())
 }

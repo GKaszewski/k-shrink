@@ -17,6 +17,7 @@ async fn main() {
     };
 
     let poll = Duration::from_millis(cfg.general.poll_ms);
+    let extra_mimes = cfg.general.extra_mimes.clone();
     let opts = ShrinkOptions {
         quality: cfg.general.quality,
         target_format: cfg.general.format.into(),
@@ -27,7 +28,7 @@ async fn main() {
 
     info!("k-shrink daemon started (poll={}ms)", cfg.general.poll_ms);
     loop {
-        if let Err(e) = k_shrink::process_once(&backend, &opts, &mut last_hash) {
+        if let Err(e) = k_shrink::process_once(&backend, &opts, &extra_mimes, &mut last_hash) {
             error!("error: {e}");
         }
         tokio::time::sleep(poll).await;
