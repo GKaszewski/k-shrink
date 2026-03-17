@@ -6,7 +6,7 @@
 yay -S k-shrink
 ```
 
-AUR page: https://aur.archlinux.org/packages/k-shrink _(placeholder — submit PKGBUILD first)_
+AUR page: https://aur.archlinux.org/packages/k-shrink
 
 Then enable the service:
 
