@@ -1,7 +1,6 @@
 # k-shrink
 
-![Build](https://img.shields.io/github/actions/workflow/status/PLACEHOLDER/k-shrink/ci.yml?branch=main)
-![AUR version](https://img.shields.io/aur/version/k-shrink)
+![AUR version](https://aur.archlinux.org/packages/k-shrink)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 Wayland clipboard daemon that automatically compresses images the moment you copy them.
