@@ -1,0 +1,92 @@
+.TH K\-SHRINK 1 "2026-03-17" "k-shrink 1.0.0" "User Commands"
+.SH NAME
+k\-shrink \- Wayland clipboard image compression daemon
+.SH SYNOPSIS
+.B k\-shrink
+.SH DESCRIPTION
+.B k\-shrink
+is a background daemon that monitors the Wayland clipboard for image content.
+When an image is detected, it is compressed according to user configuration and
+written back to the clipboard. The next paste action delivers the compressed
+image transparently.
+
+It handles images copied from web browsers, image viewers, and file managers
+(via
+.I text/uri-list
+for filesystem paths). A SHA-256 hash of the output bytes is used to detect
+its own output and avoid infinite recompression loops.
+.SH CONFIGURATION
+Configuration is stored in
+.I ~/.config/k\-shrink/config.toml
+(created automatically with defaults on first run if absent).
+
+.SS [general]
+.TP
+.BR format \ (string,\ default:\ \fIwebp\fR)
+Output image format. Supported values:
+.BR webp ,
+.BR jpeg ,
+.BR avif ,
+.BR png ,
+.BR qoi ,
+.BR farbfeld ,
+.BR tiff ,
+.BR gif ,
+.BR hdr ,
+.BR openexr ,
+.BR bmp ,
+.BR tga ,
+.BR pnm ,
+.BR ico .
+
+Lossy (quality applies):
+.B jpeg
+and
+.BR avif .
+All others are lossless or uncompressed.
+.TP
+.BR quality \ (integer\ 0\-100,\ default:\ \fI80\fR)
+Compression quality. Only applied when
+.I format
+is
+.B jpeg
+or
+.BR avif .
+Ignored for all other formats.
+.TP
+.BR poll_ms \ (integer,\ minimum\ 100,\ default:\ \fI500\fR)
+Clipboard polling interval in milliseconds. Lower values are more responsive
+but consume more CPU.
+.TP
+.BR extra_mimes \ (array\ of\ strings,\ default:\ \fI[]\fR)
+Additional MIME types under which to serve the compressed bytes. The actual
+format does not change; the same compressed data is advertised under each
+listed type. Useful for applications that only request a specific MIME type
+(e.g.\&
+.IR image/png )
+but can still decode the real format.
+
+Example:
+.I extra_mimes = ["image/png"]
+.SH FILES
+.TP
+.I ~/.config/k\-shrink/config.toml
+User configuration file.
+.SH SIGNALS
+.TP
+.B SIGINT\fR,\fB SIGTERM
+Graceful shutdown.
+.SH EXIT STATUS
+.TP
+.B 0
+Normal exit (signal received).
+.TP
+.B 1
+Fatal error (clipboard backend unavailable, config parse failure).
+.SH SEE ALSO
+.BR systemctl (1),
+.BR wl-paste (1),
+.BR wl-copy (1)
+.SH AUTHORS
+Written by the k\-shrink contributors.
+See the project repository for the full contributor list.
