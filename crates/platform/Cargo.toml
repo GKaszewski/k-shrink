@@ -1,0 +1,14 @@
+[package]
+name = "platform"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+default = ["wayland"]
+wayland = ["dep:wl-clipboard-rs"]
+
+[dependencies]
+thiserror = { workspace = true }
+tracing = { workspace = true }
+lib = { path = "../lib" }
+wl-clipboard-rs = { version = "0.9.3", optional = true }

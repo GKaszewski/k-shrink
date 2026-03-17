@@ -1,0 +1,10 @@
+[package]
+name = "lib"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+thiserror = { workspace = true }
+tracing = { workspace = true }
+image = { version = "0.25.10", features = ["webp"] }
+sha2 = "0.10"
