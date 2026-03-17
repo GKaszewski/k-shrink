@@ -9,7 +9,7 @@ license=('MIT')
 depends=('wayland')
 makedepends=('rust' 'cargo')
 source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('d26601148005821c03454ea91828e5af6f3506baa1b5860b220aaac5c305cc5d')
 
 build() {
     cd "$pkgname-$pkgver"

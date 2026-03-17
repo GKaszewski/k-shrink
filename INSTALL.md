@@ -6,7 +6,7 @@
 yay -S k-shrink
 ```
 
-AUR page: https://aur.archlinux.org/packages/k-shrink *(placeholder — submit PKGBUILD first)*
+AUR page: https://aur.archlinux.org/packages/k-shrink _(placeholder — submit PKGBUILD first)_
 
 Then enable the service:
 
@@ -21,7 +21,7 @@ systemctl --user enable --now k-shrink.service
 **Prerequisites:** Rust toolchain, `wayland` libraries.
 
 ```bash
-git clone https://github.com/PLACEHOLDER/k-shrink
+git clone https://github.com/GKaszewski/k-shrink
 cd k-shrink
 cargo build --release
 ```
@@ -54,7 +54,7 @@ mandb ~/.local/share/man   # update man index
 ## cargo install
 
 ```bash
-cargo install --git https://github.com/PLACEHOLDER/k-shrink k-shrink
+cargo install --git https://github.com/GKaszewski/k-shrink k-shrink
 ```
 
 Then enable the service (uses `%h/.cargo/bin/k-shrink`):
